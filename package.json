@@ -1,0 +1,22 @@
+{
+	"name": "discord-bot",
+	"scripts": {
+		"start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
+		"start:dev": "tsc-watch --onSuccess \"node ./dist/main.js\"",
+		"start:prod": "node ./dist/main.js",
+		"build": "tsc -p .",
+		"gcp-build": "npm run build"
+	},
+	"dependencies": {
+		"discord.js": "~12.0.2",
+		"dotenv": "^8.2.0",
+		"if-env": "^1.0.4",
+		"node-fetch": "^2.6.0"
+	},
+	"devDependencies": {
+		"@types/node": "^13.9.2",
+		"@types/node-fetch": "^2.5.5",
+		"tsc-watch": "^4.2.3",
+		"typescript": "^3.8.3"
+	}
+}
