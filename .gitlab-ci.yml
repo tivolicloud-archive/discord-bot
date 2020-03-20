@@ -11,4 +11,4 @@ deploy app engine:
         - echo "DISCORD_TOKEN=$DISCORD_TOKEN" > .env
 
         - gcloud auth activate-service-account --key-file /tmp/gcp-auth.json
-        - gcloud --quiet --project $GCP_PROJECT_ID app deploy --version $CI_PIPELINE_ID
+        - gcloud --quiet --project tivolicloud app deploy --version $CI_PIPELINE_ID
