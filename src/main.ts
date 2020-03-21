@@ -15,7 +15,9 @@ const reloadStats = async () => {
 	const statsCategory: CategoryChannel = client.channels.cache.find(
 		channel =>
 			channel.type == "category" &&
-			((channel as any).name as string).toLowerCase() == "tivoli stats",
+			((channel as any).name as string)
+				.toLowerCase()
+				.startsWith("tivoli stats"),
 	) as CategoryChannel;
 	if (statsCategory == null) throw new Error("Stats category not found");
 
@@ -31,15 +33,20 @@ const reloadStats = async () => {
 	} = await res.json();
 
 	const stats = [
-		"Current Tivoli stats (" +
-			moment()
-				.utc()
-				.format("HH:mm") +
-			" UTC)",
+		"Current Tivoli stats",
 
 		"👪 " + displayPlural(data.onlineUsers, "user") + " online",
 		"🌎 " + displayPlural(data.onlineDomains, "world") + " online",
 	];
+
+	// update channel name
+	statsCategory.setName(
+		"Tivoli Stats (" +
+			moment()
+				.utc()
+				.format("HH:mm") +
+			" UTC)",
+	);
 
 	// delete channels more than stats array length
 	channels.forEach((channel, i) => {
