@@ -59,12 +59,11 @@ const reloadStats = async () => {
 	// update channels in correct order
 	stats.forEach((name, i) => {
 		if (channels[i] != null) {
-			if (channels[i].name != name && channels[i].position != i)
-				channels[i].edit({
-					name,
-					userLimit: 0,
-					position: i,
-				});
+			channels[i].edit({
+				name,
+				userLimit: 0,
+				position: i,
+			});
 		} else {
 			statsCategory.guild.channels.create(name, {
 				type: "voice",
