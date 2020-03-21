@@ -36,7 +36,7 @@ const reloadStats = async () => {
 		"Current Tivoli stats",
 		"👪 " + displayPlural(data.onlineUsers, "user") + " online",
 		"🌎 " + displayPlural(data.onlineDomains, "world") + " online",
-		"Corona virus stats",
+		"Corona quarantine",
 		"🦠 ≈ " +
 			displayPlural(moment("2020-04-16").diff(moment(), "days"), "day") +
 			" left in Europe",
