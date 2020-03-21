@@ -1,6 +1,7 @@
 import { CategoryChannel, Client } from "discord.js";
 import * as dotenv from "dotenv";
 import fetch from "node-fetch";
+import * as moment from "moment";
 
 dotenv.config();
 
@@ -30,7 +31,12 @@ const reloadStats = async () => {
 	} = await res.json();
 
 	const stats = [
-		"Current Tivoli stats",
+		"Current Tivoli stats (" +
+			moment()
+				.utc()
+				.format("HH:mm") +
+			" UTC)",
+
 		"👪 " + displayPlural(data.onlineUsers, "user") + " online",
 		"🌎 " + displayPlural(data.onlineDomains, "world") + " online",
 	];
