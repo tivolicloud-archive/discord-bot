@@ -34,9 +34,12 @@ const reloadStats = async () => {
 
 	const stats = [
 		"Current Tivoli stats",
-
 		"👪 " + displayPlural(data.onlineUsers, "user") + " online",
 		"🌎 " + displayPlural(data.onlineDomains, "world") + " online",
+		"Corona virus stats",
+		"🦠 ≈ " +
+			displayPlural(moment("2020-04-16").diff(moment(), "days"), "day") +
+			" left in Europe",
 	];
 
 	// update channel name
@@ -56,11 +59,12 @@ const reloadStats = async () => {
 	// update channels in correct order
 	stats.forEach((name, i) => {
 		if (channels[i] != null) {
-			channels[i].edit({
-				name,
-				userLimit: 0,
-				position: i,
-			});
+			if (channels[i].name != name && channels[i].position != i)
+				channels[i].edit({
+					name,
+					userLimit: 0,
+					position: i,
+				});
 		} else {
 			statsCategory.guild.channels.create(name, {
 				type: "voice",
