@@ -36,19 +36,15 @@ const reloadStats = async () => {
 		"Current Tivoli stats",
 		"👪 " + displayPlural(data.onlineUsers, "user") + " online",
 		"🌎 " + displayPlural(data.onlineDomains, "world") + " online",
-		"Corona quarantine",
-		"🦠 ≈ " +
-			displayPlural(moment("2020-04-16").diff(moment(), "days"), "day") +
-			" left in Europe",
+		// "Corona quarantine",
+		// "🦠 ≈ " +
+		// 	displayPlural(moment("2020-04-16").diff(moment(), "days"), "day") +
+		// 	" left in Europe",
 	];
 
 	// update channel name
 	statsCategory.setName(
-		"Tivoli Stats (" +
-			moment()
-				.utc()
-				.format("HH:mm") +
-			" UTC)",
+		"Tivoli Stats (" + moment().utc().format("HH:mm") + " UTC)",
 	);
 
 	// delete channels more than stats array length
