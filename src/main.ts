@@ -33,13 +33,8 @@ const reloadStats = async () => {
 	} = await res.json();
 
 	const stats = [
-		"Current Tivoli stats",
 		"👪 " + displayPlural(data.onlineUsers, "user") + " online",
 		"🌎 " + displayPlural(data.onlineDomains, "world") + " online",
-		// "Corona quarantine",
-		// "🦠 ≈ " +
-		// 	displayPlural(moment("2020-04-16").diff(moment(), "days"), "day") +
-		// 	" left in Europe",
 	];
 
 	// update channel name
