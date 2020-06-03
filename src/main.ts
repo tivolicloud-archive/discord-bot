@@ -1,78 +1,31 @@
-import { CategoryChannel, Client } from "discord.js";
+import { Client } from "discord.js";
 import * as dotenv from "dotenv";
-import fetch from "node-fetch";
-import * as moment from "moment";
+import { reloadStats } from "./reload-stats";
+import { worldHandler } from "./world-handler";
 
 dotenv.config();
 
 const client = new Client();
-
-const displayPlural = (n: number, singular: string, plural?: string) =>
-	n + " " + (n == 1 ? singular : plural != null ? plural : singular + "s");
-
-const reloadStats = async () => {
-	// find category
-	const statsCategory: CategoryChannel = client.channels.cache.find(
-		channel =>
-			channel.type == "category" &&
-			((channel as any).name as string)
-				.toLowerCase()
-				.startsWith("tivoli stats"),
-	) as CategoryChannel;
-	if (statsCategory == null) throw new Error("Stats category not found");
-
-	const channels = statsCategory.children
-		.array()
-		.sort((a, b) => a.position - b.position);
-
-	// get data
-	const res = await fetch("https://alpha.tivolicloud.com/api/domains/stats");
-	const data: {
-		onlineUsers: number;
-		onlineDomains: number;
-	} = await res.json();
-
-	const stats = [
-		"👪 " + displayPlural(data.onlineUsers, "user") + " online",
-		"🌎 " + displayPlural(data.onlineDomains, "world") + " online",
-	];
-
-	// update channel name
-	statsCategory.setName(
-		"Tivoli Stats (" + moment().utc().format("HH:mm") + " UTC)",
-	);
-
-	// delete channels more than stats array length
-	channels.forEach((channel, i) => {
-		if (i > stats.length - 1) channel.delete();
-	});
-
-	// update channels in correct order
-	stats.forEach((name, i) => {
-		if (channels[i] != null) {
-			channels[i].edit({
-				name,
-				userLimit: 0,
-				position: i,
-			});
-		} else {
-			statsCategory.guild.channels.create(name, {
-				type: "voice",
-				parent: statsCategory,
-				userLimit: 0,
-				position: i,
-			});
-		}
-	});
-};
 
 let reloadStatsInterval: NodeJS.Timeout;
 
 client.on("ready", () => {
 	console.log("Logged in as " + client.user.tag);
 
-	reloadStats();
-	reloadStatsInterval = setInterval(reloadStats, 1000 * 60 * 5);
+	try {
+		reloadStats(client);
+	} catch (err) {}
+	reloadStatsInterval = setInterval(() => {
+		try {
+			reloadStats(client);
+		} catch (err) {}
+	}, 1000 * 60 * 5);
+
+	client.on("message", message => {
+		try {
+			worldHandler(message);
+		} catch (err) {}
+	});
 });
 
 client.on("disconnect", () => {
