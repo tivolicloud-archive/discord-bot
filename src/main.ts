@@ -2,34 +2,37 @@ import { Client } from "discord.js";
 import * as dotenv from "dotenv";
 import { reloadStats } from "./reload-stats";
 import { worldHandler } from "./world-handler";
+import { tryIgnore } from "./utils";
+import { inWorldRole, verifyInWorldRole } from "./in-world-role";
 
 dotenv.config();
 
 const client = new Client();
 
-let reloadStatsInterval: NodeJS.Timeout;
+let interval: NodeJS.Timeout;
 
 client.on("ready", () => {
 	console.log("Logged in as " + client.user.tag);
 
-	try {
-		reloadStats(client);
-	} catch (err) {}
-	reloadStatsInterval = setInterval(() => {
-		try {
-			reloadStats(client);
-		} catch (err) {}
+	tryIgnore(() => reloadStats(client));
+	tryIgnore(() => verifyInWorldRole(client));
+
+	interval = setInterval(() => {
+		tryIgnore(() => reloadStats(client));
+		tryIgnore(() => verifyInWorldRole(client));
 	}, 1000 * 60 * 5);
 
 	client.on("message", message => {
-		try {
-			worldHandler(message);
-		} catch (err) {}
+		tryIgnore(() => worldHandler(message));
+	});
+
+	client.on("presenceUpdate", (oldPresence, newPresence) => {
+		tryIgnore(() => inWorldRole(newPresence, client));
 	});
 });
 
 client.on("disconnect", () => {
-	clearInterval(reloadStatsInterval);
+	clearInterval(interval);
 });
 
 if (process.env.DISCORD_TOKEN) {
