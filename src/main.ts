@@ -22,9 +22,10 @@ client.on("ready", () => {
 		tryIgnore(() => verifyInWorldRole(client));
 	}, 1000 * 60 * 5);
 
-	client.on("message", message => {
-		tryIgnore(() => worldHandler(message));
-	});
+	// disabled since https://tivoli.link/... already gives metadata
+	// client.on("message", message => {
+	// 	tryIgnore(() => worldHandler(message));
+	// });
 
 	client.on("presenceUpdate", (oldPresence, newPresence) => {
 		tryIgnore(() => inWorldRole(newPresence, client));
