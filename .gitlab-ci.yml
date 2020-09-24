@@ -1,14 +1,14 @@
-stages:
-    - deploy
+# stages:
+#     - deploy
 
-deploy app engine:
-    stage: deploy
-    image: google/cloud-sdk:alpine
+# deploy app engine:
+#     stage: deploy
+#     image: google/cloud-sdk:alpine
 
-    # https://medium.com/google-cloud/automatically-deploy-to-google-app-engine-with-gitlab-ci-d1c7237cbe11
-    script:
-        - echo $GCP_AUTH_JSON | base64 -d > /tmp/gcp-auth.json
-        - echo "DISCORD_TOKEN=$DISCORD_TOKEN" > .env
+#     # https://medium.com/google-cloud/automatically-deploy-to-google-app-engine-with-gitlab-ci-d1c7237cbe11
+#     script:
+#         - echo $GCP_AUTH_JSON | base64 -d > /tmp/gcp-auth.json
+#         - echo "DISCORD_TOKEN=$DISCORD_TOKEN" > .env
 
-        - gcloud auth activate-service-account --key-file /tmp/gcp-auth.json
-        - gcloud --quiet --project tivolicloud app deploy --version $CI_PIPELINE_ID
+#         - gcloud auth activate-service-account --key-file /tmp/gcp-auth.json
+#         - gcloud --quiet --project tivolicloud app deploy --version $CI_PIPELINE_ID
